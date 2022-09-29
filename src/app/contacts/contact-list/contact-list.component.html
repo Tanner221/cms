@@ -3,10 +3,11 @@
   <div class="panel-body">
     <div class="row">
       <div class="col-xs-12 margin-top">
-        <a href="#" class="list-group-item clearfix" *ngFor="let contact of contacts">
-          {{ contact?.name }}
-          <img class="pull-right" [src]="contact?.imageUrl" [alt]="contact?.name">
-        </a>
+        <cms-contact-item 
+        *ngFor="let contact of contacts" 
+        (click)="onSelected(contact)" 
+        [contact]="contact">
+      </cms-contact-item>
       </div>
     </div>
   </div>
