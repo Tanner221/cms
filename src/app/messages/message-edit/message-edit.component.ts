@@ -11,9 +11,14 @@ export class MessageEditComponent implements OnInit {
 @ViewChild('messageInput') messageInputRef: ElementRef;
 @Output() messageAdded = new EventEmitter<Message>();
 
+clearItems() {
+  this.subjectInputRef.nativeElement.value = '';
+  this.messageInputRef.nativeElement.value = '';
+  }
 onAddItem() {
   const newMessage = new Message('8', this.subjectInputRef.nativeElement.value, this.messageInputRef.nativeElement.value, "Tanner Robinson")
   this.messageAdded.emit(newMessage);
+  this.clearItems();
 }
 
   constructor() { }
