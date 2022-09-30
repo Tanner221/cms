@@ -7,8 +7,11 @@ import { Message } from '../message.model';
   styleUrls: ['./message-list.component.css']
 })
 export class MessageListComponent implements OnInit {
+  onMessageAdded(newMessage: Message) {
+    this.messages.push(newMessage);
+  }
 
-  messages : Message[] = [
+  messages: Message[] = [
     new Message('1', 'New Subject', 'Message Text', 'Tanner Robinson'),
     new Message('2', 'New Subject', 'Message Text 2', 'Tanner Robinson')
   ];
