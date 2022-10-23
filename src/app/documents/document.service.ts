@@ -20,6 +20,23 @@ export class DocumentService {
   }
 
   getDocument(id:String):Document {
-    return this.documents.find((element) => element.id == id)
+    const doc = this.documents.find((element) => {
+      return element.id === id
+    })
+    return doc;
   }
+
+  documentChangedEvent = new EventEmitter<Document[]>();
+
+  deleteDocument(document: Document) {
+    if (!document) {
+       return;
+    }
+    const pos = this.documents.indexOf(document);
+    if (pos < 0) {
+       return;
+    }
+    this.documents.splice(pos, 1);
+    this.documentChangedEvent.emit(this.documents.slice());
+ }
 }

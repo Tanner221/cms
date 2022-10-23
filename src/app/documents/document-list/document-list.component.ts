@@ -9,10 +9,6 @@ import { DocumentService } from '../document.service';
 })
 export class DocumentListComponent implements OnInit {
 
-  onSelected(selectedDocument:Document) {
-    this.documentService.docuementSelectedEvent.emit(selectedDocument);
-  }
-
   documents: Document[] = []
 
   constructor(private documentService:DocumentService) { }

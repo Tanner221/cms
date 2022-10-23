@@ -4,8 +4,8 @@
     <div class="row">
       <div class="col-xs-12 margin-top">
         <cms-contact-item 
+        [routerLink]="['/contacts', contact.id]"
         *ngFor="let contact of contacts" 
-        (click)="onSelected(contact)" 
         [contact]="contact">
       </cms-contact-item>
       </div>

@@ -10,8 +10,8 @@
   <div class="panel-body">
     <div class="center-panel">
       <cms-document-item 
+      [routerLink]="['/documents',document.id]"
       *ngFor="let document of documents"
-      (click)="onSelected(document)"
       [document]="document"
       ></cms-document-item>
     </div>
