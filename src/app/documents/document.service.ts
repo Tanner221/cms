@@ -6,14 +6,14 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
   providedIn: 'root'
 })
 export class DocumentService {
+  documents:Document[] = [];
 
   constructor() {
     this.documents = MOCKDOCUMENTS;
    }
 
-  documents:Document[] = [];
 
-  @Output() docuementSelectedEvent = new EventEmitter<Document>();
+  // @Output() docuementSelectedEvent = new EventEmitter<Document>();
 
   getDocuments(): Document[]{
     return this.documents.slice();
@@ -33,6 +33,7 @@ export class DocumentService {
        return;
     }
     const pos = this.documents.indexOf(document);
+    
     if (pos < 0) {
        return;
     }

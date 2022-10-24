@@ -6,8 +6,8 @@
         <img [src]="contact.imageUrl">
       </div>
       <div class="btn-toolbar">
-        <button class="btn btn-primary">Edit</button>
-        <button class="btn btn-danger">Delete</button>
+        <button class="btn btn-primary" (click)="onEdit()">Edit</button>
+        <button class="btn btn-danger" (click)="onDelete()">Delete</button>
       </div>
     </div>
   </div>

@@ -10,29 +10,31 @@ import { DocumentService } from '../document.service';
   styleUrls: ['./document-detail.component.css']
 })
 export class DocumentDetailComponent implements OnInit {
-onView() {
-  this.nativeWindow.open(this.document.url);
-}
-onEdit() {
-  this.router.navigate(['edit'], {relativeTo: this.route, queryParamsHandling: 'preserve'});
-}
 
-onDelete() {
-  this.documentService.deleteDocument(this.document);
-  //route back to the '/documents' URL
-  this.router.navigateByUrl['/documents'];
-}
+  constructor(private documentService: DocumentService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private windRefService: WindRefService) {
+    this.nativeWindow = windRefService.getNativeWindow();
+  }
+
+  onView() {
+    this.nativeWindow.open(this.document.url);
+  }
+  onEdit() {
+    this.router.navigate(['edit'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
+  }
+
+  onDelete() {
+    this.documentService.deleteDocument(this.document);
+    //route back to the '/documents' URL
+    this.router.navigateByUrl('/documents');
+  }
 
   document: Document;
   id: string;
   nativeWindow: any;
 
-  constructor(private documentService:DocumentService,
-    private route:ActivatedRoute,
-    private router:Router,
-    private windRefService:WindRefService) { 
-      this.nativeWindow = windRefService.getNativeWindow();
-    }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];

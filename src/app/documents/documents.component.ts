@@ -9,12 +9,10 @@ import { DocumentService } from './document.service';
   styleUrls: ['./documents.component.css']
 })
 export class DocumentsComponent implements OnInit {
-  selectedDocument: Document;
-
-  constructor(private documentSevice:DocumentService) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.documentSevice.docuementSelectedEvent.subscribe(event => this.selectedDocument = event)
+    
   }
 
 }
