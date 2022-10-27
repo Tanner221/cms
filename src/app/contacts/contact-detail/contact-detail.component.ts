@@ -11,7 +11,7 @@ import { ContactService } from '../contact.service';
 export class ContactDetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private router: Router, private contactService: ContactService) { }
-  contact: Contact
+  contact: Contact;
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
