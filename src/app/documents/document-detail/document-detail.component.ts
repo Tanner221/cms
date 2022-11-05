@@ -17,6 +17,16 @@ export class DocumentDetailComponent implements OnInit {
     private windRefService: WindRefService) {
     this.nativeWindow = windRefService.getNativeWindow();
   }
+  ngOnInit(): void {
+    const id = this.route.snapshot.params['id'];
+    this.document = this.documentService.getDocument(id);
+    this.route.params.subscribe(
+      (params: Params) => {
+        this.id = params['id'];
+        this.document = this.documentService.getDocument(this.id);
+      }
+    );
+  }
 
   onView() {
     this.nativeWindow.open(this.document.url);
@@ -36,15 +46,5 @@ export class DocumentDetailComponent implements OnInit {
   nativeWindow: any;
 
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.params['id'];
-    this.document = this.documentService.getDocument(id);
-    this.route.params.subscribe(
-      (params: Params) => {
-        this.id = params['id'];
-        this.document = this.documentService.getDocument(this.id);
-      }
-    );
-  }
 
 }
