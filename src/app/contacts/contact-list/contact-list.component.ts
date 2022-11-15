@@ -12,25 +12,30 @@ import { ContactService } from '../contact.service';
 export class ContactListComponent implements OnInit, OnDestroy {
   contacts: Contact[] = [];
   subscription:Subscription;
+  term : string
   
   constructor(private contactService:ContactService,
-              private router:Router,
-              private route:ActivatedRoute) { }
-  
-  ngOnInit(): void {
-    this.subscription = this.contactService.ContactChangedEvent.subscribe(
-      (contacts: Contact[]) => {
-        this.contacts = contacts;
+    private router:Router,
+    private route:ActivatedRoute) { }
+    
+    ngOnInit(): void {
+      this.subscription = this.contactService.ContactChangedEvent.subscribe(
+        (contacts: Contact[]) => {
+          this.contacts = contacts;
+        }
+        );
+        this.contacts = this.contactService.getContacts();
       }
-      );
-      this.contacts = this.contactService.getContacts();
+      
+      ngOnDestroy(): void {
+        this.subscription.unsubscribe();
+      }
+      
+      addContact() {
+        this.router.navigate(['new'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
+      }
+
+      search(term: string) {
+        this.term = term;
+      }
     }
-    
-    ngOnDestroy(): void {
-      this.subscription.unsubscribe();
-    }
-    
-    addContact() {
-      this.router.navigate(['new'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
-    }
-}
