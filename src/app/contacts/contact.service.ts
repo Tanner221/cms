@@ -1,3 +1,4 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { outputAst } from '@angular/compiler';
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Subject } from 'rxjs';
@@ -11,15 +12,29 @@ export class ContactService {
   contacts: Contact[] = [];
   maxContactId: number;
 
-  constructor() {
-    this.contacts = MOCKCONTACTS;
-    this.maxContactId = this.getMaxId();
-  }
+  constructor(private http:HttpClient) {}
 
   ContactChangedEvent = new Subject<Contact[]>();
 
-  getContacts(): Contact[] {
-    return this.contacts.slice();
+  getContacts() {
+    this.http
+    .get('https://cms-application-e9c5c-default-rtdb.firebaseio.com/contacts.json')
+    .subscribe(
+      //success function
+      (contacts : Contact[]) => {
+        this.contacts = contacts;
+        this.maxContactId = this.getMaxId();
+
+        this.contacts.sort((a, b) =>
+          a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+        );
+        this.ContactChangedEvent.next(this.contacts.slice());
+      },
+      // error method
+      (error: any) => {
+        console.log(error);
+      }
+    );
   }
 
   getContact(id: String): Contact {
@@ -36,7 +51,8 @@ export class ContactService {
       return;
     }
     this.contacts.splice(pos, 1);
-    this.ContactChangedEvent.next(this.contacts.slice());
+    // this.ContactChangedEvent.next(this.contacts.slice());
+    this.storeContacts();
   }
 
   getMaxId(): number {
@@ -58,8 +74,9 @@ export class ContactService {
     this.maxContactId++
     newContact.id = this.maxContactId.toString();
     this.contacts.push(newContact);
-    let contactsListClone = this.contacts.slice();
-    this.ContactChangedEvent.next(contactsListClone);
+    // let contactsListClone = this.contacts.slice();
+    // this.ContactChangedEvent.next(contactsListClone);
+    this.storeContacts();
   }
 
   updateContact(originalContact: Contact, newContact: Contact) {
@@ -74,7 +91,22 @@ export class ContactService {
 
     newContact.id = originalContact.id;
     this.contacts[pos] = newContact;
-    let ContactListClone = this.contacts.slice();
-    this.ContactChangedEvent.next(ContactListClone);
+    // let ContactListClone = this.contacts.slice();
+    // this.ContactChangedEvent.next(ContactListClone);
+    this.storeContacts();
+  }
+
+  storeContacts() {
+    const contactsArray = JSON.stringify(this.contacts);
+
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    this.http
+      .put('https://cms-application-e9c5c-default-rtdb.firebaseio.com/contacts.json', contactsArray, {
+        headers: headers,
+      })
+      .subscribe(() => {
+        this.ContactChangedEvent.next(this.contacts.slice());
+      })
   }
 }

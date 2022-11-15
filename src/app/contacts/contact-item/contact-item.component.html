@@ -1,4 +1,4 @@
 <a class="list-group-item clearfix">
   {{ contact?.name }}
-  <img class="pull-right" [src]="contact?.imageUrl" [alt]="contact?.name">
+  <img *ngIf="contact?.imageUrl" class="pull-right" [src]="contact?.imageUrl" [alt]="contact?.name">
 </a>

@@ -10,7 +10,7 @@ import { MessageService } from '../message.service';
 export class MessageEditComponent implements OnInit {
 @ViewChild('subjectInput') subjectInputRef: ElementRef;
 @ViewChild('messageInput') messageInputRef: ElementRef;
-currentSender = '18';
+currentSender = '19';
 
 clearItems() {
   this.subjectInputRef.nativeElement.value = '';
