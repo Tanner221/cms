@@ -11,7 +11,6 @@ router.get('/', (req, res, next) => {
   const contacts = Message.find()
     .populate('sender')
     .then(message => {
-      console.log(message);
       res.status(200).json(message)
     }
     )
@@ -34,8 +33,6 @@ router.post('/', (req, res, next) => {
     msgText: req.body.msgText,
     sender: sender
   });
-
-  console.log(message);
 
   message.save()
     .then(createdDocument => {
