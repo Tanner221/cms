@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Contact } from 'src/app/contacts/contact.model';
 import { Message } from '../message.model';
 import { MessageService } from '../message.service';
 
@@ -10,7 +11,7 @@ import { MessageService } from '../message.service';
 export class MessageEditComponent implements OnInit {
 @ViewChild('subjectInput') subjectInputRef: ElementRef;
 @ViewChild('messageInput') messageInputRef: ElementRef;
-currentSender = '19';
+currentSender = null
 
 clearItems() {
   this.subjectInputRef.nativeElement.value = '';

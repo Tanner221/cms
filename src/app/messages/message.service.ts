@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EventEmitter, Injectable, Output } from '@angular/core';
+import { Contact } from '../contacts/contact.model';
+import { ContactService } from '../contacts/contact.service';
 import { Message } from './message.model';
-import { MOCKMESSAGES } from './MOCKMESSAGES';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +15,10 @@ export class MessageService {
   maxMessageId: number
 
   constructor(private http: HttpClient) {
-    this.messages = MOCKMESSAGES;
+    this.messages = [];
   }
 
-  getMaxId(){
+  getMaxId() {
     let maxId: number = 0;
     //check all documents for highest id
     this.messages.forEach(message => {
@@ -29,49 +30,62 @@ export class MessageService {
     return maxId;
   }
 
-  getMessages(){
+  getMessages() {
     this.http
-    .get('https://cms-application-e9c5c-default-rtdb.firebaseio.com/messages.json')
-    .subscribe(
-      //success function
-      (messages : Message[]) => {
-        console.log(messages);
-        this.messages = messages;
-        this.maxMessageId = this.getMaxId();
+      .get('http://localhost:3000/messages')
+      .subscribe(
+        //success function
+        (messages: Message[]) => {
+          this.messages = messages;
+          this.maxMessageId = this.getMaxId();
 
-        this.messages.sort((a, b) =>
-          a.sender > b.sender ? 1 : b.sender > a.sender ? -1 : 0
-        );
-        this.messageChangedEvent.next(this.messages.slice());
-      },
-      // error method
-      (error: any) => {
-        console.log(error);
-      }
-    );
+          // this.messages.sort((a, b) =>
+          //   a.sender.name > b.sender.name ? 1 : b.sender.name > a.sender.name ? -1 : 0
+          // );
+          this.messageChangedEvent.next(this.messages.slice());
+        },
+        // error method
+        (error: any) => {
+          console.log(error);
+        }
+      )
   }
+
 
   getMessage(id: String): Message {
     return this.messages.find((element) => element.id == id);
   }
 
   addMessage(message: Message) {
-    this.messages.push(message);
-    // this.messageChangedEvent.emit(this.messages.slice())
-    this.storeMessages();
-  }
+    if (!message) {
+      return;
+    }
 
-  storeMessages(){
-    const messagesArray = JSON.stringify(this.messages);
+    // make sure id of the new message is empty
+    message.id = '';
+    message.sender = new Contact('19','Tanner Robinson','rob16041@byui.edu','5095544633','',null);
+    message.sender._id = '637d07cdd6f1b5b864595767';
+    console.log(message.sender);
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-    this.http
-      .put('https://cms-application-e9c5c-default-rtdb.firebaseio.com/messages.json', messagesArray, {
-        headers: headers,
-      })
-      .subscribe(() => {
-        this.messageChangedEvent.next(this.messages.slice());
-      })
+    // add to database
+    this.http.post<{ message: string, document: Message }>('http://localhost:3000/messages',
+      message,
+      { headers: headers })
+      .subscribe(
+        (responseData) => {
+          // add new document to documents
+          this.messages.push(responseData.document);
+          this.sortAndSend();
+        }
+      );
+  }
+
+  sortAndSend() {
+    // this.messages.sort((a, b) =>
+    //   a.sender.name > b.sender.name ? 1 : b.sender.name > a.sender.name ? -1 : 0
+    // );
+    this.messageChangedEvent.next(this.messages.slice());
   }
 }

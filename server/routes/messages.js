@@ -1,6 +1,7 @@
 var express = require('express');
 const sequenceGenerator = require('./sequenceGenerator');
 const Message = require('../models/message');
+const message = require('../models/message');
 
 var router = express.Router();
 module.exports = router; 
@@ -8,8 +9,10 @@ module.exports = router;
 router.get('/', (req, res, next) => {
   // call the Document model find() method to get all documents in the collection
   const contacts = Message.find()
-    .then(contacts => {
-      res.status(200).json(contacts)
+    .populate('sender')
+    .then(message => {
+      console.log(message);
+      res.status(200).json(message)
     }
     )
     .catch(err => {
@@ -24,12 +27,12 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const maxMessageId = sequenceGenerator.nextId("messages");
-
+  const sender = req.body.sender._id;
   const message = new Message({
     id: maxMessageId,
     subject: req.body.subject,
     msgText: req.body.msgText,
-    sender: req.body.sender
+    sender: sender
   });
 
   console.log(message);
