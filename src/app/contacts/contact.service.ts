@@ -36,8 +36,8 @@ export class ContactService {
       )
   }
 
-  getContact(id: String): Contact {
-    return this.contacts.find((element) => element.id == id)
+  getContact(id: String) {
+    return this.http.get<{message: string, contact: Contact}>('http://localhost:3000/contacts/' + id);
   }
 
   DeleteContact(contact: Contact) {

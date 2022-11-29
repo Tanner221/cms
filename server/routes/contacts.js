@@ -1,6 +1,7 @@
 var express = require('express');
 const sequenceGenerator = require('./sequenceGenerator');
 const Contact = require('../models/contact');
+const message = require('../models/message');
 
 var router = express.Router();
 module.exports = router; 
@@ -20,6 +21,23 @@ router.get('/', (req, res, next) => {
   // endIf
   // return response status 200 and a JSON object containing the list of documents
 });
+
+router.get('/:id', (req, res, next) => {
+  Contact.findOne({id: req.params.id})
+    .then(contact => {
+      res.status(201).json(
+        {
+          message: "Successfully found the Contact",
+          contact : contact
+        }
+      )
+  })
+  .catch(err => {
+    res.status(404).json({
+      message: err
+    })
+  })
+})
 
 
 router.post('/', (req, res, next) => {

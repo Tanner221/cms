@@ -63,9 +63,9 @@ export class MessageService {
 
     // make sure id of the new message is empty
     message.id = '';
-    message.sender = new Contact('19','Tanner Robinson','rob16041@byui.edu','5095544633','',null);
-    message.sender._id = '637d07cdd6f1b5b864595767';
-    console.log(message.sender);
+    //message.sender = new Contact('19','Tanner Robinson','rob16041@byui.edu','5095544633','',null);
+    //message.sender._id = '637d07cdd6f1b5b864595767';
+    //console.log(message.sender);
 
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 

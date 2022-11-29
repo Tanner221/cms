@@ -1,5 +1,7 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { response } from 'express';
 import { Contact } from 'src/app/contacts/contact.model';
+import { ContactService } from 'src/app/contacts/contact.service';
 import { Message } from '../message.model';
 import { MessageService } from '../message.service';
 
@@ -11,7 +13,7 @@ import { MessageService } from '../message.service';
 export class MessageEditComponent implements OnInit {
 @ViewChild('subjectInput') subjectInputRef: ElementRef;
 @ViewChild('messageInput') messageInputRef: ElementRef;
-currentSender = null
+currentSender : Contact = null
 
 clearItems() {
   this.subjectInputRef.nativeElement.value = '';
@@ -22,12 +24,21 @@ onAddItem() {
   const msgTextValue = this.messageInputRef.nativeElement.value;
 
   const newMessage = new Message('1', subjectValue, msgTextValue, this.currentSender)
+  console.log(newMessage);
+  return;
   this.messageService.addMessage(newMessage);
   this.clearItems();
 }
 
-  constructor(private messageService:MessageService) { }
+  constructor(private messageService:MessageService, private contactService:ContactService) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.contactService.getContact('19')
+    .subscribe(
+      response => {
+        this.currentSender = response.contact;
+      }
+    )
+  }
 
 }
