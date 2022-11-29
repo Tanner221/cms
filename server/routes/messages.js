@@ -36,6 +36,7 @@ router.post('/', (req, res, next) => {
 
   message.save()
     .then(createdDocument => {
+      createdDocument.populate('sender');
       res.status(201).json({
         message: 'Message added successfully',
         document: createdDocument

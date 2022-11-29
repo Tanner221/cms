@@ -60,7 +60,6 @@ export class MessageService {
     if (!message) {
       return;
     }
-
     // make sure id of the new message is empty
     message.id = '';
     //message.sender = new Contact('19','Tanner Robinson','rob16041@byui.edu','5095544633','',null);
@@ -76,7 +75,7 @@ export class MessageService {
       .subscribe(
         (responseData) => {
           // add new document to documents
-          this.messages.push(responseData.document);
+          this.getMessages();
           this.sortAndSend();
         }
       );

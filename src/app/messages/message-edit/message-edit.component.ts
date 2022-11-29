@@ -24,8 +24,6 @@ onAddItem() {
   const msgTextValue = this.messageInputRef.nativeElement.value;
 
   const newMessage = new Message('1', subjectValue, msgTextValue, this.currentSender)
-  console.log(newMessage);
-  return;
   this.messageService.addMessage(newMessage);
   this.clearItems();
 }
